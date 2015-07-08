@@ -1,0 +1,54 @@
+{
+  "name": "ghostwriter",
+  "description": "Test your CasperJS within Chrome Dev Tools",
+  "version": "0.1.0",
+  "homepage": "https://github.com/fentas/ghostwriter",
+  "author": {
+    "name": "Jan Guth",
+    "email": "jan.guth@gmail.com",
+    "url": "jan.guth.so"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fentas/ghostwriter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fentas/ghostwriter/issues"
+  },
+  "bin": {
+    "ghostwriter": "bin/ghostwriter"
+  },
+  "licenses": [
+    {
+      "type": "AGPLv3",
+      "url": "https://github.com/fentas/ghostwriter/blob/master/LICENSE.md"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "CasperJS",
+    "PhantomJS",
+    "web",
+    "scraping",
+    "devtools"
+  ],
+  "dependencies": {
+    "home-config": "^0.1.0",
+    "shelljs": "~0.2.5",
+    "string": "^3.3.0",
+    "yargs": "^3.15.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-watch": "~0.5.0"
+  }
+}

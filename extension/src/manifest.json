@@ -1,0 +1,24 @@
+// Extension ID: pcpeehcbkecjlibjpkmbdgkofneaefif
+// -- [key] see: https://developer.chrome.com/extensions/manifest/key
+{
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzPuNTk/3FYSvv+3lg+VRHQqQXWQ178lKXXcCc+RlDI3bnsn+zibsJiJnZtAhx697CaHsG8JynNRpwwNMOzpfeMRI8LefmDGlFeI203GTJjRUGhll8yYHtva24SxMfw7Ho3wIWOsFmpDg3BxJgOjMamkBDnmidCCQovIWn/3g3TzKOTlag9GPzM8BcSt23jNHVRra0LPiNQyk98NWjbfYaVONi7jWsXgQIzuYzkGaJCuEChbnoqHRVz9CVYJOtTT/iZNFIGX2LiNt8WmPvyxlc9zrhhxa6D1hYcLsMna+L2tfZeGtiMIfTYXypp2aLxWXzj1bEXc4DblmLdJd27LGBQIDAQAB",
+
+  "name": "Ghostwriter",
+  "version": "0.2.1",
+  "description": "Ghostly writes scripts for CasperJS",
+  "icons": {
+    "16": "img/icon-16.png",
+    "32": "img/icon-32.png",
+    "48": "img/icon-48.png",
+    "64": "img/icon-64.png",
+    "128": "img/icon-128.png",
+    "256": "img/icon-256.png"
+  },
+  "devtools_page": "devtools-chrome.html",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "manifest_version": 2,
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "minimum_chrome_version": "25.0.1364.97"
+}
