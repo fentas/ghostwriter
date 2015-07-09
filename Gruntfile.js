@@ -45,6 +45,8 @@ module.exports = function (grunt) {
           'extension/src/js/vendor/jquery-ui.min.js',
           'extension/src/js/vendor/jquery.layout-latest.js',
           'extension/src/js/vendor/ace.js',
+          'extension/src/js/utils/*.js',
+          'extension/src/js/lib/*.js',
           'extension/build/tmp/templates.js',
           'extension/src/js/*.js'
 

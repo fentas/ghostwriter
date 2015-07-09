@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-//require('../lib/grunt-devtools')();
 
 var yargs = require('yargs')
-			.command('_', false)
+			.command('native-messaging-host', false, function (yargs) {
+				argv = yargs
+					.help('help')
+					.argv
+			})
 	    .command('chrome', '(un)install native messaging',function (yargs) {
 		    argv = yargs
 					.command('install', 'Installs chrome native messaging interface')
@@ -118,33 +121,33 @@ var yargs = require('yargs')
 
 
 switch ( argv._[0] ) {
-	case '_':
-		var struct = require('bufferpack')
+	case 'native-messaging-host':
 
-		while ( true ) {
-			// Read the message length (first 4 bytes).
-			var text_length_bytes = process.stdin.read(4)
-
-	    if ( text_length_bytes.length() == 0) {
-	      //if queue:
-	      //  queue.put(None)
-	      process.exit(0)
+		["info", "error", "warn", "log"].forEach(function(func) {
+			console[func] = function(){
+				process.stderr.write(Array.prototype.join.call(arguments, " ") + "\n");
 			}
+		})
 
-	    // Unpack message length as 4 byte integer.
-	    var text_length = struct.unpack('i', text_length_bytes)[0]
+		var nmapi = require('../lib/nativeMessagingAPI'),
+				api = new nmapi
 
-	    // Read the text (JSON object) of the message.
-	    var text = process.stdin.read(text_length).decode('utf-8')
+		api.on('init', function(options) {
 
-			/*
-	    if queue:
-	      queue.put(text)
-	    else:
-	      # In headless mode just send an echo message back.
-	      send_message('{"echo": %s}' % text)
-			*/
-		}
+		})
+
+		api.on('data', function(data) {
+			
+		})
+		api.on('disconnect', function() {
+
+		})
+
+		process.stdin.on('readable', function() {
+			api.processInput();
+		});
+
+		process.stdin.resume();
 
 		break;
 	case 'chrome':

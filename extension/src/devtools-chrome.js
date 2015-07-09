@@ -1,7 +1,10 @@
+/**
+* Debuging utility
+**/
 
-bglog = function(obj) {
+console.send = function(obj) {
 	if(chrome && chrome.runtime) {
-		chrome.runtime.sendMessage({type: "bglog", obj: obj});
+		chrome.runtime.sendMessage({type: "console", obj: obj});
 	}
 }
 
