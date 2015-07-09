@@ -5,7 +5,7 @@
 {
   "name": "ghostwriter",
   "description": "Communication between ghostwriter and docker",
-  "path": "HOST_PATH",
+  "path": "HOST_PATH _",
   "type": "stdio",
   "allowed_origins": [
     "chrome-extension://pcpeehcbkecjlibjpkmbdgkofneaefif/"

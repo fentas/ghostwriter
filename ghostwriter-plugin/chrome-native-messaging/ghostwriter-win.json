@@ -5,7 +5,7 @@
 {
   "name": "ghostwriter",
   "description": "Communication between ghostwriter and docker",
-  "path": "native-messaging-example-host.bat",
+  "path": "native-messaging.bat",
   "type": "stdio",
   "allowed_origins": [
     "chrome-extension://pcpeehcbkecjlibjpkmbdgkofneaefif/"

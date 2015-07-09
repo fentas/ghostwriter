@@ -1,2 +1,217 @@
 #!/usr/bin/env node
-require('../lib/grunt-devtools')();
+//require('../lib/grunt-devtools')();
+
+var yargs = require('yargs')
+			.command('_', false)
+	    .command('chrome', '(un)install native messaging',function (yargs) {
+		    argv = yargs
+					.command('install', 'Installs chrome native messaging interface')
+					.command('uninstall', 'Uninstalls chrome native messaging interface')
+					.demand(2)
+			    .help('help')
+					.check(function(_argv) {
+						if ( ! _argv._[1] || ! /^(un)?install/.test(_argv._[1]) )
+							throw new Error('Missing command.')
+						return true;
+					})
+			    .argv
+		  })
+			.command('projects', 'list of projects',function (yargs) {
+				argv = yargs
+					.help('help')
+					.argv
+			})
+
+			.option('n', {
+				alias: 'name',
+				demand: true,
+				describe: 'Name of the project',
+				type: 'string'
+			})
+			.check(function(_argv) {
+				if ( ! _argv.name )
+					throw new Error('Argument must not be empty: n')
+				return true;
+			})
+			.option('a', {
+				alias: 'add',
+				describe: 'Add new project',
+				type: 'boolean'
+			})
+			.option('p', {
+				alias: 'path',
+				describe: 'Path to folder',
+				type: 'string'
+			})
+			.implies('add', 'path')
+			.option('remove', {
+				//alias: 'remove',
+				describe: 'Removes porject',
+				type: 'boolean'
+			})
+
+			.option('d', {
+				alias: 'docker',
+				describe: 'Call docker functions',
+				type: 'boolean'
+			})
+			.option('i', {
+				alias: 'image',
+				describe: 'Docker image alias',
+				default: 'fentas/phantomjs',
+				type: 'string'
+			})
+			.option('f', {
+				alias: 'file',
+				describe: 'Path to file (relative)',
+				type: 'string'
+			})
+			.implies('docker', 'file')
+
+			.option('c', {
+				alias: 'create',
+				describe: 'Create file / folder',
+				type: 'boolean'
+			})
+			.option('t', {
+				alias: 'temp',
+				describe: 'File creation is temporary',
+				type: 'boolean'
+			})
+			.check(function(_argv) {
+				if ( _argv.create && ! _argv.file && ! _argv.path )
+					throw new Error("Implications failed:\ncreate -> file\t...xor...\ncreate -> path")
+				return true;
+			})
+
+			.option('w', {
+				alias: 'write',
+				describe: 'Write content to file',
+				type: 'string'
+			})
+			.implies('write', 'file')
+			.option('r', {
+				alias: 'read',
+				describe: 'Read file',
+				type: 'boolean'
+			})
+			.implies('read', 'file')
+
+			.option('l', {
+				alias: 'list',
+				describe: 'Lists project folder content',
+				type: 'boolean'
+			})
+
+
+			.option('pretty', {
+				describe: 'Prints pretty output',
+				type: 'boolean'
+			})
+
+
+			.example('$0 chrome install', 'Installs native messaging interface.')
+			.example('$0 -n example -a -p .', 'Adds current dir to projects.')
+	    .help('help')
+	    .epilog('need more help? Go to https://github.com/fentas/ghostwriter'),
+	argv = yargs.argv
+
+
+switch ( argv._[0] ) {
+	case '_':
+		var struct = require('bufferpack')
+
+		while ( true ) {
+			// Read the message length (first 4 bytes).
+			var text_length_bytes = process.stdin.read(4)
+
+	    if ( text_length_bytes.length() == 0) {
+	      //if queue:
+	      //  queue.put(None)
+	      process.exit(0)
+			}
+
+	    // Unpack message length as 4 byte integer.
+	    var text_length = struct.unpack('i', text_length_bytes)[0]
+
+	    // Read the text (JSON object) of the message.
+	    var text = process.stdin.read(text_length).decode('utf-8')
+
+			/*
+	    if queue:
+	      queue.put(text)
+	    else:
+	      # In headless mode just send an echo message back.
+	      send_message('{"echo": %s}' % text)
+			*/
+		}
+
+		break;
+	case 'chrome':
+		var os = require('os'),
+				spawn = require('child_process').spawn,
+				fs = require('fs'),
+				path = require('path')
+
+		spawn(path.resolve(__dirname+'/../chrome-native-messaging/'+argv._[1]+'.'+(/^win/i.test(os.platform())?'bat':'sh')), [], { stdio: 'inherit' })
+
+		try { fs.lstatSync(path.resolve('~/.ghostwriter')) } catch(e) {
+			require('home-config').load('.ghostwriter', {
+			  'sample': {
+					'path': path.resolve(__dirname+'/../sample')
+				}
+			}).save()
+		}
+		break;
+	case 'projects':
+		var projects = require('home-config').load('.ghostwriter')
+		delete projects.__filename
+
+		if ( argv.pretty )
+			console.log(require('prettyjson').render(projects, {})) //keysColor: 'rainbow'
+		else
+			process.stdout.write(JSON.stringify(projects) + '\n')
+		break;
+	default:
+		var projects = require('home-config').load('.ghostwriter'),
+				fs = require('fs'),
+				proot
+
+		try { fs.lstatSync(proot = projects[argv.name].path) } catch(e) {
+			throw new Error('Missing folder of project. ['+projects[argv.name].path+']')
+		}
+
+		if ( argv.list ) {
+			var fs = require('fs'),
+					path = require('path'),
+					walk = function (currentDirPath, ressources) {
+				    fs.readdirSync(currentDirPath).forEach(function(name) {
+							var ressource = {
+										type: 'file',
+										name: name,
+										path: path.join(currentDirPath, name)
+									},
+			        		stat = ressource.stat = fs.statSync(ressource.path);
+			        if (stat.isFile())
+								ressources.push(ressource)
+			        else if (stat.isDirectory()) {
+								ressource.type = 'directory'
+								ressource.files = []
+								ressources.push(ressource)
+
+		            walk(ressource.path, ressource.files);
+			        }
+				    })
+					},
+					ress = []
+			walk(proot, ress)
+
+			if ( argv.pretty )
+				console.log(require('prettyjson').render(ress))
+			else {
+				process.stdout.write(JSON.stringify(ress) + '\n')
+			}
+		}
+
+		break;
+}

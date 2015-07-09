@@ -1,9 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 set -e
+
+PS3='Please choose: '
 
 if [ "$(uname -s)" == "Darwin" ]; then
   if [ "$(whoami)" == "root" ]; then
@@ -13,13 +15,23 @@ if [ "$(uname -s)" == "Darwin" ]; then
   fi
 else
   if [ "$(whoami)" == "root" ]; then
-    TARGET_DIR="/etc/opt/chrome/native-messaging-hosts"
+    [ -d "/etc/opt/chrome" ] && options=("${options[@]}" "/etc/opt/chrome")
+    [ -d "/etc/chromium" ] && options=("${options[@]}" "/etc/chromium")
+    select inst in "${options[@]}"; do [ -z "$inst" ] && continue; break; done
+
+    TARGET_DIR="$inst/native-messaging-hosts"
   else
-    TARGET_DIR="$HOME/.config/google-chrome/NativeMessagingHosts"
+    [ -d "$HOME/.config/google-chrome" ] && options=("${options[@]}" "google-chrome")
+    [ -d "$HOME/.config/google-chrome-beta" ] && options=("${options[@]}" "google-chrome-beta")
+    [ -d "$HOME/.config/chromium" ] && options=("${options[@]}" "chromium")
+    select inst in "${options[@]}"; do [ -z "$inst" ] && continue; break; done
+
+    TARGET_DIR="$HOME/.config/$inst/NativeMessagingHosts"
   fi
 fi
 
 HOST_NAME=ghostwriter
 rm "$TARGET_DIR/$HOST_NAME.json"
 
-echo "Chrome native messaging ($HOST_NAME) has been uninstalled."
+echo ""
+echo "Chrome native messaging has been uninstalled. [$TARGET_DIR/$HOST_NAME.json]"
