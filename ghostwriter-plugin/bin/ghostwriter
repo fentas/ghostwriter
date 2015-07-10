@@ -24,6 +24,16 @@ var yargs = require('yargs')
 					.help('help')
 					.argv
 			})
+			.command('config', 'list of projects',function (yargs) {
+				argv = yargs
+					.option('s', {
+						alias: 'set',
+						describe: 'Sets config',
+						type: 'string'
+					})
+					.help('help')
+					.argv
+			})
 
 			.option('n', {
 				alias: 'name',
@@ -117,7 +127,15 @@ var yargs = require('yargs')
 			.example('$0 -n example -a -p .', 'Adds current dir to projects.')
 	    .help('help')
 	    .epilog('need more help? Go to https://github.com/fentas/ghostwriter'),
-	argv = yargs.argv
+	argv = yargs.argv,
+	ghostwriter = require('../lib/ghostwriter')(argv),
+	cli = function(data) {
+		if ( argv.pretty )
+			console.log(require('prettyjson').render(data, {})) //keysColor: 'rainbow'
+		else
+			console.log(JSON.stringify(data))
+	}
+
 
 
 switch ( argv._[0] ) {
@@ -130,24 +148,55 @@ switch ( argv._[0] ) {
 		})
 
 		var nmapi = require('../lib/nativeMessagingAPI'),
-				api = new nmapi
+				api = new nmapi(process.stdin),
+				watch = require('watch')
 
 		api.on('init', function(options) {
-
+			// send data to give a live sign...
+			api.emit('config', ghostwriter.config())
 		})
 
-		api.on('data', function(data) {
-			
-		})
 		api.on('disconnect', function() {
 
 		})
+		api.on('config', ghostwriter.config)
+		api.on('projects', ghostwriter.projects)
+		//api.on('list', ghostwriter.list)
 
-		process.stdin.on('readable', function() {
-			api.processInput();
-		});
+		api.on('watch', function(name) {
+			var projects = ghostwriter.projects()
+			if ( ! projects[name] )
+				return false;
 
-		process.stdin.resume();
+			var w = null;
+			watch.watchTree(projects[name].path, function (f, curr, prev) {
+				if (typeof f == "object" && prev === null && curr === null) {
+		      // Finished walking the tree
+		    } else if (prev === null) {
+		      // f is a new file
+		    } else if (curr.nlink === 0) {
+		      // f was removed
+		    } else {
+		      // f was changed
+		    }
+				// prevent double calling etc..
+				clearTimeout(w)
+				w = setTimeout(function() {
+					api.emit('list', ghostwriter.list(projects[name].path))
+				}, 10)
+			})
+			return true
+		})
+		api.on('unwatch', function(name) {
+			var projects = ghostwriter.projects()
+			if ( ! projects[name] )
+				return false
+
+			watch.unwatchTree(projects[name].path)
+			return true
+		})
+
+
 
 		break;
 	case 'chrome':
@@ -160,20 +209,20 @@ switch ( argv._[0] ) {
 
 		try { fs.lstatSync(path.resolve('~/.ghostwriter')) } catch(e) {
 			require('home-config').load('.ghostwriter', {
-			  'sample': {
-					'path': path.resolve(__dirname+'/../sample')
+				'workspace':  path.resolve('~/ghostwriter'),
+				'projects': {
+				  'sample': {
+						'path': path.resolve(__dirname+'/../sample')
+					}
 				}
 			}).save()
 		}
 		break;
 	case 'projects':
-		var projects = require('home-config').load('.ghostwriter')
-		delete projects.__filename
-
-		if ( argv.pretty )
-			console.log(require('prettyjson').render(projects, {})) //keysColor: 'rainbow'
-		else
-			process.stdout.write(JSON.stringify(projects) + '\n')
+		cli(ghostwriter.projects())
+		break;
+	case 'config':
+		cli(ghostwriter.config())
 		break;
 	default:
 		var projects = require('home-config').load('.ghostwriter'),
@@ -185,35 +234,7 @@ switch ( argv._[0] ) {
 		}
 
 		if ( argv.list ) {
-			var fs = require('fs'),
-					path = require('path'),
-					walk = function (currentDirPath, ressources) {
-				    fs.readdirSync(currentDirPath).forEach(function(name) {
-							var ressource = {
-										type: 'file',
-										name: name,
-										path: path.join(currentDirPath, name)
-									},
-			        		stat = ressource.stat = fs.statSync(ressource.path);
-			        if (stat.isFile())
-								ressources.push(ressource)
-			        else if (stat.isDirectory()) {
-								ressource.type = 'directory'
-								ressource.files = []
-								ressources.push(ressource)
-
-		            walk(ressource.path, ressource.files);
-			        }
-				    })
-					},
-					ress = []
-			walk(proot, ress)
-
-			if ( argv.pretty )
-				console.log(require('prettyjson').render(ress))
-			else {
-				process.stdout.write(JSON.stringify(ress) + '\n')
-			}
+			cli(ghostwriter.list())
 		}
 
 		break;

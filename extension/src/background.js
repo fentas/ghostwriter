@@ -48,7 +48,7 @@ chrome.runtime.onConnect.addListener(function(port) {
   else if ( port.name == "chrome.nativeMessaging port" ) {
     var nmPort = null;
     port.onMessage.addListener(function(msg) {
-      if(msg.event == 'init') {
+      if ( msg.event == 'init' ) {
         nmPort = chrome.runtime.connectNative("ghostwriter");
         console.log('CONNECT')
         nmPort.onDisconnect.addListener(function(){
@@ -61,11 +61,11 @@ chrome.runtime.onConnect.addListener(function(port) {
           port.disconnect();
         });
         nmPort.onMessage.addListener(function(data){
-          console.log('MESSAGE')
+          console.log('MESSAGE', data)
           port.postMessage(data);
         });
       }
-      if( nmPort ) {
+      if ( nmPort ) {
         console.log('POST',msg)
         nmPort.postMessage(msg);
       }

@@ -1,11 +1,7 @@
 
-
 function NativeMessagingBridge() {
 	EventEmitter.call(this);
-
-
 }
-
 inherits(NativeMessagingBridge, EventEmitter);
 
 extend(NativeMessagingBridge.prototype, {
@@ -38,7 +34,7 @@ extend(NativeMessagingBridge.prototype, {
 		}, 0);
 	},
 	emit: function(event, data){
-		if(this.port){
+		if(this.port) {
 			this.port.postMessage({
 				event: event,
 				data: data
