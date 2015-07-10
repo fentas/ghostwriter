@@ -44,6 +44,7 @@ module.exports = function (grunt) {
           'extension/src/js/vendor/jquery.min.js',
           'extension/src/js/vendor/jquery-ui.min.js',
           'extension/src/js/vendor/jquery.layout-latest.js',
+          'extension/src/js/vendor/jstree.min.js',
           'extension/src/js/vendor/ace.js',
           'extension/src/js/utils/*.js',
           'extension/src/js/lib/*.js',
@@ -75,8 +76,9 @@ module.exports = function (grunt) {
       chrome: {
         files: {
           "extension/build/ghostwriter/css/devtools.css": "extension/src/less/devtools.less",
-          "extension/build/ghostwriter/css/jquery-ui.min.css": "extension/src/less/jquery-ui.min.css",
-          "extension/build/ghostwriter/css/font-awesome.css": "extension/src/less/font-awesome.css"
+          "extension/build/ghostwriter/css/jquery-ui.min.css": "extension/src/less/vendor/jquery-ui.min.css",
+          "extension/build/ghostwriter/css/font-awesome.css": "extension/src/less/vendor/font-awesome.css",
+          "extension/build/ghostwriter/css/jstree.css": "extension/src/less/vendor/jstree.css"
         }
       }
     },

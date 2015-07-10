@@ -1,5 +1,29 @@
+<%
+function list(files) {
+	_.each(files, function(file) {
+		if ( file.type == "file" ) {
+%>
+<li class="file">
+	<a href="#<%= file.name %>" data-name="<%= file.name %>" data-path="<%= file.path %>" data-stats="<%= JSON.stringify(file.stats) %>"><%= file.name %></a>
+</li>
+<%
+		}
+		else {
+%>
+<li>
+  <label for="<%= file.path %>"><%= file.name %></label>
+  <input type="checkbox" id="<%= file.path %>" data-name="<%= file.name %>" data-stats="<%= JSON.stringify(file.stats) %>" />
+  <ol>
+<%
+			list(file.files);
+%>
+  </ol>
+</li>
+<%
+		}
+	});
+}
+%>
 <ol class="file-tree">
-<% _.each(arguments[0], function(project, name) { %>
-  <li><a href="#<%= name %>" data-path="<%= project.path %>"><%= name %></a></li>
-<% }); %>
+<% list(arguments[0]); %>
 </ol>

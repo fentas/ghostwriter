@@ -6,10 +6,10 @@ function Settings() {
 	var storageAPI = StorageApiBridge.instance;
 	var self = this;
 	var localCopy = {
-		config: {},
-		projects: {},
-		
-		colorTheme: 'monokai_bright'
+		"active-project": null,
+		"config": null,
+
+		"colorTheme": "monokai_bright"
 	};
 
 	this.load = function(){
@@ -33,10 +33,12 @@ function Settings() {
 
 	this.updateProject = function (name, obj) {
 		var projects = localCopy['projects'] || {};
-		var project = projects[url] || {};
-		extend(project, obj);
+		var project = projects[name] || {};
+		deepExtend(project, obj);
 		projects[name] = project;
 		this.set('projects', projects);
+		
+		return project
 	}
 
 }

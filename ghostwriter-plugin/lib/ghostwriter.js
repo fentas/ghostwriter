@@ -24,7 +24,7 @@ extend(ghostwriter.prototype, {
 					fs.readdirSync(currentDirPath).forEach(function(name) {
 						var ressource = {
 									type: 'file',
-									name: name,
+									text: name,
 									path: path.join(currentDirPath, name)
 								},
 								stat = ressource.stat = fs.statSync(ressource.path);
@@ -32,10 +32,10 @@ extend(ghostwriter.prototype, {
 							ressources.push(ressource)
 						else if (stat.isDirectory()) {
 							ressource.type = 'directory'
-							ressource.files = []
+							ressource.children = []
 							ressources.push(ressource)
 
-							walk(ressource.path, ressource.files);
+							walk(ressource.path, ressource.children);
 						}
 					})
 				},
