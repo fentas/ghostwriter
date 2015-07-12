@@ -27,8 +27,12 @@ $('#panel').html(tplPanel({})).layout({
   slidable: true, //???
   livePaneResizing: true //???
 })
+$('#panel #back-projects').bind('click', function() {
+  $('#notice').addClass('projects')
+})
 
 $('#tasks, #output, #debug').tabs({})
+
 
 var socket = new NativeMessagingBridge(),
 		settings = new Settings(),
@@ -61,15 +65,18 @@ socket.on('list', function(list) {
 
 // init call from native messaging host
 socket.on('config', function(config) {
+  var $notice = $('#notice')
+
 	settings.set('config', config)
   if ( settings.get('active-project') ) {
     if ( ! project )
       socket.emit('watch', (project = settings.get('active-project')))
 
-    $('#notice').removeAttr('class')
+    $notice.removeAttr('class')
   }
   else {
-    var $notice = $('#notice').removeClass('loading').addClass('projects')
+    $notice.removeClass('loading').addClass('projects')
+  }
   	$('#projects').html(
       $(tplProjectList(config.projects)).find('a').bind('click', function() {
         $notice.removeAttr('class')
@@ -81,7 +88,7 @@ socket.on('config', function(config) {
         socket.emit('watch', project)
       }).end()
     )
-  }
+
 })
 
 settings.on('ready', function() {

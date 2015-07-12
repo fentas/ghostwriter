@@ -165,6 +165,100 @@ ol.rectangle-list, ol.rounded-list {
   }
 }
 
+a {
+  color: #000;
+}
+
+/* css for the shiny buttons */
+.btn {
+  cursor: pointer;
+  margin: 2px;
+  border-radius: 5px;
+  text-decoration: none;
+  padding: 5px;
+  font-size: 22px;
+  transition: .3s;
+  -webkit-transition: .3s;
+  -moz-transition: .3s;
+  -o-transition: .3s;
+  display: inline-block;
+}
+
+.blue {
+  color: #387DF1; //#55acee;
+  border: 2px #387DF1 solid; //#55acee;
+}
+
+.blue:hover {
+  background-color: #387DF1; //#55acee;
+  color: #fff
+}
+
+.green {
+  color: #2ecc71;
+  border: 2px #2ecc71 solid;
+}
+
+.green:hover {
+  color: #fff;
+  background-color: #2ecc71;
+}
+
+.red {
+  color: #e74c3c;
+  border: 2px #e74c3c solid;
+}
+
+.red:hover {
+  color: #fff;
+  background-color: #e74c3c;
+}
+
+.purple {
+  color: #9b59b6;
+  border: 2px #9b59b6 solid;
+}
+
+.purple:hover {
+  color: #fff;
+  background-color: #9b59b6;
+}
+
+.orange {
+  color: #e67e22;
+  border: 2px #e67e22 solid;
+}
+
+.orange:hover {
+  color: #fff;
+  background-color: #e67e22;
+}
+
+.yellow {
+  color: #f1c40f;
+  border: 2px #f1c40f solid;
+}
+
+.yellow:hover {
+  color: #fff;
+  background-color: #f1c40f;
+}
+
+
+.btn.small {
+  font-size: 0.4rem;
+  border-width: 1px;
+}
+
+.btn.no-border {
+  border: 0 none;
+}
+
+.buttons {
+  padding-top: 30px;
+  text-align: center;
+}
+
 /*
 ol.file-tree {
   li {
@@ -202,7 +296,7 @@ ol.file-tree {
     }
     input + ol {
       background: url(toggle-small-expand.png) 40px 0 no-repeat;
-      margin: -0.938em 0 0 -44px; // 15px 
+      margin: -0.938em 0 0 -44px; // 15px
       display: block;
       height: 1em;
     }
@@ -259,6 +353,10 @@ ol.file-tree {
   border-right: 1px solid #A3A3A3;
 }
 
+#status {
+  border-top: 1px solid #A3A3A3;
+  background: @header-background;
+}
 
 #notice {
   position: absolute;
