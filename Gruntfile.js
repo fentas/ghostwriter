@@ -29,7 +29,12 @@ module.exports = function (grunt) {
     jst: {
       chrome: {
         files: {
-          "extension/build/tmp/templates.js": ["extension/src/templates/**/*.*"]
+          "extension/build/build-chrome/tmp/templates.js": ["extension/src/templates/**/*.*"]
+        }
+      },
+      mozilla: {
+        files: {
+          "extension/build/build-mozilla/tmp/templates.js": ["extension/src/templates/**/*.*"]
         }
       }
     },
@@ -48,12 +53,32 @@ module.exports = function (grunt) {
           'extension/src/js/vendor/ace.js',
           'extension/src/js/utils/*.js',
           'extension/src/js/lib/*.js',
-          'extension/build/tmp/templates.js',
-          'extension/src/js/*.js'
 
+          'extension/src-chrome/js/lib/*.js',
+          'extension/build/build-chrome/tmp/templates.js',
+
+          'extension/src/js/*.js'
         ],
-        dest: 'extension/build/ghostwriter/js/devtools.js'
+        dest: 'extension/build/build-chrome/ghostwriter/js/devtools.js'
       },
+      mozilla: {
+        src: [
+          'extension/src/js/vendor/lodash.min.js',
+          'extension/src/js/vendor/jquery.min.js',
+          'extension/src/js/vendor/jquery-ui.min.js',
+          'extension/src/js/vendor/jquery.layout-latest.js',
+          'extension/src/js/vendor/jstree.min.js',
+          'extension/src/js/vendor/ace.js',
+          'extension/src/js/utils/*.js',
+          'extension/src/js/lib/*.js',
+          
+          'extension/src-mozilla/js/lib/*.js',
+          'extension/build/build-mozilla/tmp/templates.js',
+
+          'extension/src/js/*.js'
+        ],
+        dest: 'extension/build/build-mozilla/ghostwriter/js/devtools.js'
+      }
     },
 
     copy: {
@@ -61,10 +86,20 @@ module.exports = function (grunt) {
         files: [
           { expand: true, cwd: 'extension/src/',
             src: ['*', 'css/**', 'img/**', 'fonts/**', '!less', '!templates'],
-            dest: 'extension/build/ghostwriter'},
+            dest: 'extension/build/build-chrome/ghostwriter'},
           { expand: true, cwd: 'extension/src-chrome/',
             src: ['*'],
-            dest: 'extension/build/ghostwriter'}
+            dest: 'extension/build/build-chrome/ghostwriter'}
+        ]
+      },
+      mozilla: {
+        files: [
+          { expand: true, cwd: 'extension/src/',
+            src: ['*', 'css/**', 'img/**', 'fonts/**', '!less', '!templates'],
+            dest: 'extension/build/build-mozilla/ghostwriter'},
+          { expand: true, cwd: 'extension/src-mozilla/',
+            src: ['*'],
+            dest: 'extension/build/build-mozilla/ghostwriter'}
         ]
       }
     },
@@ -75,10 +110,18 @@ module.exports = function (grunt) {
       },
       chrome: {
         files: {
-          "extension/build/ghostwriter/css/devtools.css": "extension/src/less/devtools.less",
-          "extension/build/ghostwriter/css/jquery-ui.min.css": "extension/src/less/vendor/jquery-ui.min.css",
-          "extension/build/ghostwriter/css/font-awesome.css": "extension/src/less/vendor/font-awesome.css",
-          "extension/build/ghostwriter/css/jstree.css": "extension/src/less/vendor/jstree.css"
+          "extension/build/build-chrome/ghostwriter/css/devtools.css": "extension/src/less/devtools.less",
+          "extension/build/build-chrome/ghostwriter/css/jquery-ui.min.css": "extension/src/less/vendor/jquery-ui.min.css",
+          "extension/build/build-chrome/ghostwriter/css/font-awesome.css": "extension/src/less/vendor/font-awesome.css",
+          "extension/build/build-chrome/ghostwriter/css/jstree.css": "extension/src/less/vendor/jstree.css"
+        }
+      },
+      mozilla: {
+        files: {
+          "extension/build/build-mozilla/ghostwriter/css/devtools.css": "extension/src/less/devtools.less",
+          "extension/build/build-mozilla/ghostwriter/css/jquery-ui.min.css": "extension/src/less/vendor/jquery-ui.min.css",
+          "extension/build/build-mozilla/ghostwriter/css/font-awesome.css": "extension/src/less/vendor/font-awesome.css",
+          "extension/build/build-mozilla/ghostwriter/css/jstree.css": "extension/src/less/vendor/jstree.css"
         }
       }
     },
@@ -89,7 +132,9 @@ module.exports = function (grunt) {
           atBegin: true
         },
         files: [
-          'extension/src/**/*'
+          'extension/src/**/*',
+          'extension/src-chrome/**/*',
+          'extension/src-mozilla/**/*',
         ],
         tasks: ['build']
       }
@@ -117,6 +162,13 @@ module.exports = function (grunt) {
     'less:chrome'
   ]);
 
+  grunt.registerTask('build:mozilla', [
+   'copy:mozilla',
+   'jst:mozilla',
+   'concat:mozilla',
+   'less:mozilla'
+ ]);
+
   // build all extensions
-  grunt.registerTask('build', ['build:chrome']);
+  grunt.registerTask('build', ['build:chrome', 'build:mozilla']);
 };
