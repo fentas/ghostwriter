@@ -21,7 +21,7 @@ function NativeMessagingAPI(stream){
       var msg = process.stdin.read(read_length);
       if(msg != null){
         msg = JSON.parse(msg);
-        EventEmitter.prototype.emit.call(self, msg.event, [msg.data]);
+        EventEmitter.prototype.emit.call(self, msg.event, msg.data);
         mode = 0;
       }
     }

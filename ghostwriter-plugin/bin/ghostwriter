@@ -182,7 +182,8 @@ switch ( argv._[0] ) {
 				// prevent double calling etc..
 				clearTimeout(w)
 				w = setTimeout(function() {
-					api.emit('list', ghostwriter.list(projects[name].path))
+					ghostwriter._set({name: name})
+					api.emit('list', ghostwriter.list())
 				}, 10)
 			})
 			return true
@@ -194,6 +195,9 @@ switch ( argv._[0] ) {
 
 			watch.unwatchTree(projects[name].path)
 			return true
+		})
+		api.on('file', function(options) {
+			return ghostwriter._set(options).file()
 		})
 
 
@@ -225,16 +229,11 @@ switch ( argv._[0] ) {
 		cli(ghostwriter.config())
 		break;
 	default:
-		var projects = require('home-config').load('.ghostwriter'),
-				fs = require('fs'),
-				proot
-
-		try { fs.lstatSync(proot = projects[argv.name].path) } catch(e) {
-			throw new Error('Missing folder of project. ['+projects[argv.name].path+']')
-		}
-
 		if ( argv.list ) {
 			cli(ghostwriter.list())
+		}
+		else if ( argv.file ) {
+			cli(ghostwriter.file())
 		}
 
 		break;

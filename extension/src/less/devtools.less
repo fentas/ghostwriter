@@ -259,6 +259,32 @@ a {
   text-align: center;
 }
 
+
+.fa.custom {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: relative;
+  top: -2px;
+  width: 16px;
+  fill: grey !important;
+
+  opacity: 0.8;
+
+  &.start {
+    background-image: url(../img/icon-play.svg)
+  }
+  &.step-over {
+    background-image: url(../img/icon-step-over.svg)
+  }
+  &.step-into {
+    background-image: url(../img/icon-step-into.svg)
+  }
+  &.step-out {
+    background-image: url(../img/icon-step-out.svg)
+  }
+}
+
 /*
 ol.file-tree {
   li {
@@ -328,6 +354,7 @@ ol.file-tree {
   //width: 300px;
   min-width: 150px;
   border-right: 1px solid #A3A3A3;
+  border-left: 1px solid #A3A3A3;
   margin: auto;
 
   button {
@@ -347,10 +374,14 @@ ol.file-tree {
   }
 }
 #debug {
-  border-left: 1px solid #A3A3A3;
+  .ui-tabs-anchor {
+    padding-left: 4px;
+    padding-right: 4px;
+    height: 100%;
+  }
 }
-#task {
-  border-right: 1px solid #A3A3A3;
+#tasks {
+
 }
 
 #status {
@@ -464,7 +495,15 @@ ol.file-tree {
 }
 
 #output {
-  background-color: #D3D3D3;
+  //background: #D3D3D3;
+
+  .ace_content {
+    //background: #FFFFFF;
+  }
+  .ace_editor {
+    height: 100%;
+    margin: 0;
+  }
 }
 
 
@@ -623,6 +662,7 @@ ol.file-tree {
     overflow-y: auto;
     overflow-x: hidden;
     height: calc(~"100% - 1.5rem");
+    padding: 0;
 }
 
 
@@ -826,3 +866,39 @@ ol.file-tree {
 }
 div.ui-layout-mask {}		/* standard mask for iframes */
 iframe.ui-layout-mask {}	/* extra mask for objects/applets */
+
+
+/*
+jstree
+*/
+.jstree-icon {
+  font-family: FontAwesome;
+  font-style: normal;
+
+  &.file {
+    &::before {
+      content: '\f016';
+    }
+    &.js {
+      &::before {
+        content: '\f1c9'
+      }
+    }
+  }
+  &.directory {
+    &::before {
+      content: '\f114';
+    }
+  }
+
+
+  &.jstree-ocl {
+    width: 16px !important;
+  }
+}
+.jstree-open {
+  .jstree-icon.directory::before {
+    content: '\f115';
+  }
+
+}
