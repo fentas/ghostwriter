@@ -18,19 +18,22 @@ ul.terminal {
 		  top: 0;
 		}
 
-		&.command:before {
-		  content: '$';
+		&.command {
 			counter-reset: line;
-			left: 10px;
+			&:before {
+			  content: '$';
+				left: 10px;
+			}
 		}
 
-		counter-increment: line;
-
-    &:not(.command):before {
-      content: '[ ' counter(line) ' ]';
-			color: #777;
-			right: 0;
-			left: auto;
+    &:not(.command) {
+			counter-increment: line;
+			&:before {
+	      content: '[ ' counter(line) ' ]';
+				color: #777;
+				right: 0;
+				left: auto;
+			}
 		}
 
 		&.ghostwriter:before {
