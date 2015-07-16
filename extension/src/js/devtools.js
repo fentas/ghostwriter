@@ -140,6 +140,9 @@ socket.on('file', function (data) {
       editor.session.setUseSoftTabs(true)
       editor.session.setTabSize(2)
       editor.setShowPrintMargin(false)
+      editor.setOptions({
+        maxLines: Infinity
+      })
     }, 0)
   }
 })
