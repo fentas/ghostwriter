@@ -17,12 +17,44 @@
   </ul>
 </section>
 <section id='debug' class="ui-layout-east">
-  <ul>
-    <li class="ui-state-default"><a class="ui-tabs-anchor"><i class="fa fa-fw custom start">&nbsp;</i></a></li>
-    <li class="ui-state-default"><a class="ui-tabs-anchor"><i class="fa fa-fw custom step-over">&nbsp;</i></a></li>
-    <li class="ui-state-default"><a class="ui-tabs-anchor"><i class="fa fa-fw custom step-into">&nbsp;</i></a></li>
-    <li class="ui-state-default"><a class="ui-tabs-anchor"><i class="fa fa-fw custom step-out">&nbsp;</i></a></li>
+  <ul class="status-bar-list">
+    <li><button class="status-bar-item play-status-bar-item"><i class="glyph"></i></button></li>
+    <li><button class="status-bar-item step-over-status-bar-item" disabled="disabled"><i class="glyph"></i></button></li>
+    <li><button class="status-bar-item step-in-status-bar-item" disabled="disabled"><i class="glyph"></i></button></li>
+    <li><button class="status-bar-item step-out-status-bar-item" disabled="disabled"><i class="glyph"></i></button></li>
+    <li><button class="status-bar-item breakpoint-status-bar-item"><i class="glyph"></i></button></li>
+    <li><button class="status-bar-item pause-on-exceptions-status-bar-item"><i class="glyph"></i></button></li>
   </ul>
+  <div><!--
+    <div>
+      <h3>Threads</h3>
+      <div><p>Main</p></div>
+    </div>-->
+    <div>
+      <h3>Watch</h3>
+      <div><p class="info">No Watch Expressions</p></div>
+    </div>
+    <div>
+      <h3>Call Stack</h3>
+      <div><p class="info">Not paused</p></div>
+    </div>
+    <div>
+      <h3>Scope</h3>
+      <div><p class="info">Not paused</p></div>
+    </div>
+    <div>
+      <h3>Breakpoints</h3>
+      <div><p class="info">No Breakpoints</p></div>
+    </div>
+    <div>
+      <h3>XHR Breakpoints</h3>
+      <div><p class="info">No Breakpoints</p></div>
+    </div>
+    <div>
+      <h3>Event Listener Breakpoints</h3>
+      <div><p>...</p></div>
+    </div>
+  </div>
 </section>
 <section id='status' class="ui-layout-south">
   <a href="#" id="back-projects" class="btn blue small no-border"><i class="fa fa-sign-out"></i> Projects</a>

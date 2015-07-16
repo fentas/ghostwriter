@@ -1,0 +1,35 @@
+
+/*
+jstree
+*/
+.jstree-icon {
+  font-family: FontAwesome;
+  font-style: normal;
+
+  &.file {
+    &::before {
+      content: '\f016';
+    }
+    &.js {
+      &::before {
+        content: '\f1c9'
+      }
+    }
+  }
+  &.directory {
+    &::before {
+      content: '\f114';
+    }
+  }
+
+
+  &.jstree-ocl {
+    width: 16px !important;
+  }
+}
+.jstree-open {
+  .jstree-icon.directory::before {
+    content: '\f115';
+  }
+
+}

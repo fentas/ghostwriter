@@ -1,0 +1,230 @@
+
+#panel {
+  height: 100%;/*
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+  -webkit-flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -webkit-justify-content: center;
+  -webkit-align-content: center;
+  -webkit-align-items: stretch;
+  -webkit-flex-grow: 1;*/
+}
+
+#tasks, #debug {
+  height: 100%;
+  //width: 300px;
+  min-width: 150px;
+  border-right: 1px solid #A3A3A3;
+  border-left: 1px solid #A3A3A3;
+  margin: auto;
+/*
+  button {
+    display: block;
+    font-weight: bold;
+    padding: 5px;
+    padding-left: 20px;
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+    &:hover {
+      background: rgba(56, 121, 217, 0.1);
+      color: rgb(92, 110, 129);
+    }
+  }
+*/
+}
+
+#debug {
+  .ui-tabs-anchor {
+    padding-left: 4px;
+    padding-right: 4px;
+    height: 100%;
+  }
+}
+#tasks {
+
+}
+
+#status {
+  //border-top: 1px solid #A3A3A3;
+  background: @header-background;
+}
+
+#notice {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+
+  &:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.2;
+    background-image: url(../img/icon-128.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+
+  &:not([class]) {
+    display: none;
+  }
+  &[class] ~ #panel {
+    -webkit-filter: blur(20px);
+  }
+
+  p {
+    color: rgb(92, 110, 129);
+    font-size: 25px;
+    padding: 20px;
+    text-align: center;
+    margin: 0;
+  }
+  small {
+    color: rgba(92, 110, 129, 0.5);
+  }
+  input[type="text"] {
+    padding: 10px;
+    border: solid 5px #c9c9c9;
+    transition: border 0.3s;
+    background-color: rgba(255,255,255,0.6);
+  }
+  input[type="text"]:focus,
+  input[type="text"].focus {
+    border: solid 5px #969696;
+  }
+
+
+  & > aside {
+    display: none;
+  }
+  &.loading > aside.loading {
+    display: block;
+    & > p {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      margin: 0;
+    }
+  }
+  &.update > aside.update { display: block; }
+  &.nativeMessaging > aside.nativeMessaging { display: block; }
+  &.projects > aside.projects {
+    display: block;
+
+    p {
+      padding: 5px;
+      & > input[type="text"] {
+        width: 50%;
+      }
+    }
+    p:first-child {
+      padding-top: 20px;
+      padding-bottom: 0;
+      font-family: Satisfy, cursive;
+    }
+
+    #projects{
+      overflow: auto;
+      max-height:50%;
+
+      & > ol {
+        width: 50%;
+        margin: auto;
+        text-align: left;
+
+        a {
+          border: 1px solid #CCC;
+          background: rgba(255,255,255,0.6); //rgba(255,255,255,0.6)
+        }
+      }
+    }
+  }
+}
+
+#output, #tasks {
+  overflow: hidden;
+}
+
+#output {
+  //background: #D3D3D3;
+
+  .ace_content {
+    //background: #FFFFFF;
+  }
+  .ace_editor {
+    height: 100%;
+    margin: 0;
+  }
+}
+
+
+#running {
+  display: none;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.running {
+  #tasks .task:hover {
+    cursor: not-allowed;
+  }
+
+  #tasks .active-task .b {
+    display: block;
+  }
+
+  #tasks .task {
+    opacity: 0.3;
+  }
+
+  #tasks .active-task{
+    opacity: 1;
+  }
+
+  #running {
+    display: block;
+  }
+}
+
+#backgroundTasks li .b {
+  display: block;
+}
+
+#updateWarning {
+  display: none;
+  position: relative;
+  border: 1px solid rgb(64%, 64%, 64%);
+  border-top: none;
+  border-right: none;
+  background: -webkit-linear-gradient(top, #FFF8BA 0%, #F1DA36 100%);
+  font-size: 10px;
+  p {
+    padding: 5px;
+    margin: 0;
+  }
+}
+
+@media all and (max-width: 250px) {
+  #output {
+    display: none;
+  }
+  #tasks {
+    width: 100%;
+  }
+}

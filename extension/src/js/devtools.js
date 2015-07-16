@@ -39,7 +39,16 @@ $('#panel').html(tplPanel({})).layout({
   closable: true,
   resizable: true,
   slidable: true, //???
-  livePaneResizing: true //???
+  livePaneResizing: true, //???
+  east: {
+    minSize: 250
+  },
+  west: {
+    minSize: 200
+  },
+  south: {
+    minSize: 24
+  }
 })
 $('#panel #back-projects').bind('click', function() {
   $('#notice').addClass('projects')
@@ -52,6 +61,14 @@ var $tabs = $('#tasks, #output, #debug').tabs({})
     $tabs.eq(1).tabs( "refresh" );
   }
 });
+
+$('#debug > div > div').accordion({
+  animate: false,
+  collapsible: true,
+  heightStyle: "content",
+  header: 'h3',
+  active: false
+})
 
 
 var socket = new NativeMessagingBridge(),

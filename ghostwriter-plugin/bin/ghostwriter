@@ -68,10 +68,24 @@ var yargs = require('yargs')
 				describe: 'Call docker functions',
 				type: 'boolean'
 			})
+			.option('e', {
+				alias: 'entrypoint',
+				describe: 'Docker entrypoint',
+				default: '/usr/bin/casperjs',
+				type: 'string'
+			})
+			.option('env', {
+				describe: 'Docker enviroment',
+				type: 'object'
+			})
 			.option('i', {
 				alias: 'image',
 				describe: 'Docker image alias',
 				default: 'fentas/phantomjs',
+				type: 'string'
+			})
+			.option('source', {
+				describe: 'Docker script',
 				type: 'string'
 			})
 			.option('f', {
@@ -79,7 +93,6 @@ var yargs = require('yargs')
 				describe: 'Path to file (relative)',
 				type: 'string'
 			})
-			.implies('docker', 'file')
 
 			.option('c', {
 				alias: 'create',
@@ -198,6 +211,10 @@ switch ( argv._[0] ) {
 		})
 		api.on('file', function(options) {
 			return ghostwriter._set(options).file()
+		})
+
+		api.on('docker', function(options) {
+			return ghostwriter._set(options).docker()
 		})
 
 
