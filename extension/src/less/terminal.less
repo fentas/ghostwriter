@@ -1,0 +1,36 @@
+ul.terminal {
+	margin: 0;
+  padding: 5px;
+  list-style: none;
+  //background: #141414;
+  color: #141414; //#45D40C;
+  font: 0.8em 'Andale Mono', Consolas, 'Courier New';
+  line-height: 1.6em;
+
+	& > li {
+		word-wrap: break-word;
+	  position: relative;
+	  padding: 0 0 0 25px;
+
+		&:before {
+		  position: absolute;
+		  left: 0;
+		  top: 0;
+		}
+
+		&.command:before {
+		  content: '$';
+			counter-reset: line;
+			left: 10px;
+		}
+
+		counter-increment: line;
+
+    &:not(.command):before {
+      content: '[ ' counter(line) ' ]';
+			color: #777;
+			right: 0;
+			left: auto;
+		}
+	}
+}

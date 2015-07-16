@@ -39,16 +39,19 @@ $('#panel').html(tplPanel({})).layout({
   closable: true,
   resizable: true,
   slidable: true, //???
-  livePaneResizing: true/*, //???
+  livePaneResizing: true, //???
+  /*
   east: {
     minSize: 250
   },
   west: {
     minSize: 200
   },
+  */
   south: {
-    minSize: 24
-  }*/
+    minSize: 24,
+    closable: false
+  }
 })
 $('#panel #back-projects').bind('click', function() {
   $('#notice').addClass('projects')
@@ -175,10 +178,19 @@ settings.on('ready', function() {
 settings.load()
 
 
+var terminal = $('#status > ul.terminal')
+
+socket.on('docker.stdout', function(message) {
+  $('<li>'+message+'</li>').appendTo(terminal)
+  terminal.scrollTop(terminal[0].scrollHeight)
+})
+
 
 /**
 * actions
 **/
 $('#debug-action').bind('click', function(event) {
-  socket.emit('docker.start', {'name': project, 'file': $('#output > .ui-tabs-nav > .ui-tabs-active > a').attr['data-path']})
+  var file = $('#output > .ui-tabs-nav > .ui-tabs-active > a').attr['data-path']
+  $('<li class="command">docker [blahblubb] fentas/phantomjs '+file+'</li>').appendTo(terminal)
+  socket.emit('docker.start', {'name': project, 'file': file})
 })
