@@ -65,25 +65,25 @@ extend(ghostwriter.prototype, {
 			return fs.readFileSync(path.join(self.project, self._options.file), {encoding: 'utf8'})
 		}
 	},
-	docker: function() {
+	docker: function(cb) {
 		var c3docker = require('c3docker'),
 				fs = require('fs'),
 				path = require('path'),
 				self = this,
-				file, path, cmd
+				file, cmd
 
 		if ( self._options.file ) {
 			file = path.join('/data/', self._options.file)
-			path = self.project
 		}
 		else if ( self._options.source ) {
 
 		}
 
-		cmd = [path.resolve(__dirname+'/../docker/main.js') + ' ' + file]
+		cmd = ['/ghostwriter/main.js', '--ghostwriter-exec=' + file]
 
-		c3docker({'Volumes': {'/data': {}, '/ghostwriter':{}}, Cmd: cmd, 'Entrypoint': self.entrypoint, 'Image': self.image, 'Env': self.env}).then(function(container) {
-		  container.c3io
+		c3docker({'Volumes': {'/data': {}, '/ghostwriter':{}}, Cmd: cmd, 'Entrypoint': self._options.entrypoint, 'Image': self._options.image, 'Env': self._options.env}).then(function(container) {
+		  cb(container)
+			/*
 		    .on('message', function(msg) {
 		      if ( msg.stdin ) {
 		        this.stdin = 'Hello World'
@@ -96,14 +96,17 @@ extend(ghostwriter.prototype, {
 		      }
 
 		    })
+			*/
 
-		  container.start({Binds: [__dirname+':/data']}, function(err, exec) {
+		  container.start({Binds: [self.project+':/data', path.resolve(__dirname+'/../docker')+':/ghostwriter']}, function(err, exec) {
 		    //console.log(exec)
 		    //setTimeout(function() {
 		    //  container.kill(function(err) {})
 		    //}, 15000)
 		  })
 		}).done()
+
+		return true;
 	}
 })
 

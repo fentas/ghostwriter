@@ -213,8 +213,19 @@ switch ( argv._[0] ) {
 			return ghostwriter._set(options).file()
 		})
 
-		api.on('docker', function(options) {
-			return ghostwriter._set(options).docker()
+		api.on('docker.start', function(options) {
+			return ghostwriter._set(options).docker(function(container) {
+				container.c3io
+				.on('stderr', function(msg) {
+					api.emit('docker.stderr', msg.toString('utf8'))
+				})
+				.on('stdout', function(msg) {
+					api.emit('docker.stdout', msg.toString('utf8'))
+				})
+				.on('stdin', function(msg) {
+					api.emit('docker.stdin', msg.toString('utf8'))
+				})
+			})
 		})
 
 

@@ -39,7 +39,7 @@ $('#panel').html(tplPanel({})).layout({
   closable: true,
   resizable: true,
   slidable: true, //???
-  livePaneResizing: true, //???
+  livePaneResizing: true/*, //???
   east: {
     minSize: 250
   },
@@ -48,7 +48,7 @@ $('#panel').html(tplPanel({})).layout({
   },
   south: {
     minSize: 24
-  }
+  }*/
 })
 $('#panel #back-projects').bind('click', function() {
   $('#notice').addClass('projects')
@@ -125,6 +125,8 @@ socket.on('file', function (data) {
 
   }
   else {
+    $('#debug-action').removeAttr('disabled')
+
     // open editor TODO: remove
     setTimeout(function() {
       var editor = ace.edit($('#output').find('div.loading').removeClass('loading').find('p')[0]) //ace editor
@@ -135,7 +137,7 @@ socket.on('file', function (data) {
       editor.session.setUseSoftTabs(true)
       editor.session.setTabSize(2)
       editor.setShowPrintMargin(false)
-    }, 10)
+    }, 0)
   }
 })
 
@@ -171,3 +173,12 @@ settings.on('ready', function() {
   socket.connect();
 })
 settings.load()
+
+
+
+/**
+* actions
+**/
+$('#debug-action').bind('click', function(event) {
+  socket.emit('docker.start', {'name': project, 'file': $('#output > .ui-tabs-nav > .ui-tabs-active > a').attr['data-path']})
+})
