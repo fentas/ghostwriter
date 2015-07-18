@@ -51,7 +51,7 @@ module.exports = function (grunt) {
           'extension/src/js/vendor/jquery.layout-latest.js',
           'extension/src/js/vendor/jstree.min.js',
           'extension/src/js/vendor/ace/**/*.*',
-          'extension/src/js/utils/*.js',
+          'extension/src/js/utils/**/*.js',
           'extension/src/js/lib/*.js',
 
           'extension/src-chrome/js/lib/*.js',
@@ -69,7 +69,7 @@ module.exports = function (grunt) {
           'extension/src/js/vendor/jquery.layout-latest.js',
           'extension/src/js/vendor/jstree.min.js',
           'extension/src/js/vendor/ace.js',
-          'extension/src/js/utils/*.js',
+          'extension/src/js/utils/**/*.js',
           'extension/src/js/lib/*.js',
 
           'extension/src-mozilla/js/lib/*.js',

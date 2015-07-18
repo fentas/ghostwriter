@@ -9,12 +9,6 @@ document.getElementById('toolsVersion').innerHTML = 'v' + manifest.version;
 
 }
 
-console.send = function(obj) {
-	if(chrome && chrome.runtime) {
-		chrome.runtime.sendMessage({type: "console", obj: obj});
-	}
-}
-
 $.jstree.defaults.sort = function(node1, node2) {
   var node1 = this._model.data[node1],
       node2 = this._model.data[node2]
@@ -58,12 +52,21 @@ $('#panel #back-projects').bind('click', function() {
 })
 
 var $tabs = $('#tasks, #output, #debug').tabs({})
-.eq(1).find( ".ui-tabs-nav" ).sortable({
+.eq(1)
+.on("tabsactivate", function(event, ui) {
+  setTimeout(function() {
+    if ( $(ui.newPanel[0]).attr('data-test') == '1' ) {
+      console.warn('erere')
+    }
+  }, 250)
+})
+.find( ".ui-tabs-nav" ).sortable({
   axis: "x",
   stop: function() {
     $tabs.eq(1).tabs( "refresh" );
   }
-});
+})
+
 
 $('#debug > div > div').accordion({
   animate: false,
@@ -132,7 +135,11 @@ socket.on('file', function (data) {
 
     // open editor TODO: remove
     setTimeout(function() {
-      var editor = ace.edit($('#output').find('div.loading').removeClass('loading').find('p')[0]) //ace editor
+      //TODO: better check?
+      var test = /casper\.test\.begin/g.test(data)?1:0,
+          div = $('#output').find('div.loading').removeClass('loading').attr('data-test', test),
+          editor = ace.edit(div.find('p')[0]) //ace editor
+
       editor.setValue(data)
       editor.gotoLine(1)
       editor.setTheme("ace/theme/chrome");
@@ -141,7 +148,7 @@ socket.on('file', function (data) {
       editor.session.setTabSize(2)
       editor.setShowPrintMargin(false)
       editor.setOptions({
-        maxLines: Infinity
+        //maxLines: Infinity
       })
     }, 0)
   }
