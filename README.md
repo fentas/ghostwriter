@@ -1,8 +1,7 @@
-grunt-devtools 0.2.1
+Ghostwriter 0.2.1
 ==============
-![](http://v14d.com/u/grunt-devtools-main.png)
 
-__Grunt Task Runner Extension for Chrome Developer Tools and Adobe Brackets__
+__CasperJS Extension for Chrome (Mozilla \*\*Comming soon\*\*) Developer Tools__
 
 
 ## Quick Setup (Google Chrome)
@@ -14,11 +13,6 @@ __Grunt Task Runner Extension for Chrome Developer Tools and Adobe Brackets__
   * run __`grunt-devtools`__ in a directory with a Gruntfile!
 * open Chrome Dev tools, find the __Grunt tab__. Your grunt tasks should now be accessible from Chrome.
 
-
-## Screenshots
-
-![](http://v14d.com/i/513393cbb7e8b.jpg)
-![](http://v14d.com/i/5133941ceb6b4.jpg)
 
 ## Local Setup
 
@@ -42,4 +36,3 @@ If issues still occur - [report it](https://github.com/vladikoff/grunt-devtools/
 
 See the [CHANGELOG](CHANGELOG) for release history .
 See the [contributing guide](CONTRIBUTING.md) for local development instructions.
-

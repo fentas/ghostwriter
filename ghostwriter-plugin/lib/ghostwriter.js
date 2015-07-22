@@ -79,7 +79,9 @@ extend(ghostwriter.prototype, {
 
 		}
 
-		cmd = ['/ghostwriter/main.js', '--ghostwriter-exec=' + file]
+		cmd = ['test', '/ghostwriter/main.js', '--ghostwriter-exec=' + file]
+		if ( ! self._options.test )
+			cmd.shift()
 
 		c3docker({'Volumes': {'/data': {}, '/ghostwriter':{}}, Cmd: cmd, 'Entrypoint': self._options.entrypoint, 'Image': self._options.image, 'Env': self._options.env}).then(function(container) {
 		  cb(container)

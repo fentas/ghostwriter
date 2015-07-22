@@ -47,16 +47,16 @@ $('#panel').html(tplPanel({})).layout({
     closable: false
   }
 })
-$('#panel #back-projects').bind('click', function() {
-  $('#notice').addClass('projects')
-})
 
 var $tabs = $('#tasks, #output, #debug').tabs({})
 .eq(1)
 .on("tabsactivate", function(event, ui) {
   setTimeout(function() {
     if ( $(ui.newPanel[0]).attr('data-test') == '1' ) {
-      console.warn('erere')
+      $('#debug-action').attr('class', 'status-bar-item focus-status-bar-item')
+    }
+    else {
+      $('#debug-action').attr('class', 'status-bar-item play-status-bar-item')
     }
   }, 250)
 })
@@ -191,7 +191,7 @@ settings.load()
 var terminal = $('#status > ul.terminal')
 
 socket.on('docker.stdout', function(message) {
-  $('<li>'+message+'</li>').appendTo(terminal)
+  $('<li>'+ansi_up.ansi_to_html(message)+'</li>').appendTo(terminal)
   terminal.scrollTop(terminal[0].scrollHeight)
 })
 
@@ -200,7 +200,32 @@ socket.on('docker.stdout', function(message) {
 * actions
 **/
 $('#debug-action').bind('click', function(event) {
-  var file = $('#output > .ui-tabs-nav > .ui-tabs-active > a').attr['data-path']
+  var file = $('#output > .ui-tabs-nav > .ui-tabs-active > a').attr['data-path'],
+      options = {
+        'name': project,
+        'file': file,
+        'test': ! $(this).hasClass('play-status-bar-item')
+      }
   $('<li class="command">docker [blahblubb] fentas/phantomjs '+file+'</li>').appendTo(terminal)
-  socket.emit('docker.start', {'name': project, 'file': file})
+
+  socket.emit('docker.start', options)
+})
+
+
+$('#panel #back-projects').bind('click', function() {
+  $('#notice').addClass('projects')
+})
+
+$('#debug-action > *').longclick(function() {
+  var self = $(this).parent(),
+      b = $('<div class="button-toolbox"><button class="status-bar-item play-status-bar-item emulate-active" title="Run script"><i class="glyph"></i></button><button class="status-bar-item focus-status-bar-item" title="Run capserjs test"><i class="glyph"></i></button></div>')
+  .css(extend($(this).offset())).appendTo(document.body)
+  .find('button').bind('mouseup', function() {
+    self.attr('class', $(this).attr('class').replace(/\s*emulate-active\s*/, ''))
+  }).bind('mouseover', function() {
+    $(this).addClass('emulate-active')
+  }).bind('mouseout', function() {
+    $(this).removeClass('emulate-active')
+  }).end()
+  $(document).mouseup(function() { b.remove(); })
 })
